@@ -23,10 +23,8 @@ const Countries = ({newFind, countries, setNewFind, setUrl}) => {
 
   const showCountry = () => {
     if (findCountry.length === 1){
-      //setUrl(findCountry[0].capital)
       return <Country key={findCountry[0].name} country={findCountry[0]} />
     } else{
-      //setUrl('')
       return <div>
         {
           findCountry.length >= 10
