@@ -1,0 +1,26 @@
+.message{
+  color: blueviolet;
+  background: azure;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.blogStyle {
+  border-color: rgb(187, 255, 187);
+  border-style: solid;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-top: 10;
+  margin-bottom: 5px;
+}
