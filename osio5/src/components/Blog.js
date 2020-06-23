@@ -2,35 +2,35 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
 
-const Blog = ({ blog, user, setBlogs, setMessage, setError, removeThisBlog}) => {
+const Blog = ({ blog, user, setMessage, setError, removeThisBlog }) => {
   const [informationVisible, setInformationVisible] = useState(false)
   const [thisBlog, setThisBlog] = useState(blog)
   const hideWhenVisible = { display: informationVisible ? 'none' : '' }
   const showWhenVisible = { display: informationVisible ? '' : 'none' }
-  
+
   const UpdateLike = () => {
-    let newLike = {likes: blog.likes + 1}
+    let newLike = { likes: blog.likes + 1 }
 
     blogService
-    .update(blog.id, newLike)
-    .then(returnedBlog =>{
-      setThisBlog(returnedBlog)
-      setInformationVisible(false)
-    })
-    .catch(error => {
-    setError(true)
-    setMessage(error.response.data.error)
-    setTimeout(() => {
-      setMessage(null)
-      setError(false)
-    }, 4000)
-  })
+      .update(blog.id, newLike)
+      .then(returnedBlog => {
+        setThisBlog(returnedBlog)
+        setInformationVisible(false)
+      })
+      .catch(error => {
+        setError(true)
+        setMessage(error.response.data.error)
+        setTimeout(() => {
+          setMessage(null)
+          setError(false)
+        }, 4000)
+      })
   }
   const removeCheck = () => {
     if (blog.user.name === user.name) {
       return (
         <div>
-        <button onClick={removeThisBlog}>remove</button>
+          <button onClick={removeThisBlog}>remove</button>
         </div>
       )
     }

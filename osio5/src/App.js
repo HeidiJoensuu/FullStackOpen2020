@@ -14,33 +14,34 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs.sort((blog1, blog2) => blog2.likes - blog1.likes))
     )
-  }, [])
+  }, [blogs])
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-       const user = JSON.parse(loggedUserJSON)
-       setUser(user)
-       blogService.setToken(user.token)
-      }
-    }, [])
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
 
   return (
     <div>
       <Notification message={mess} errorMes={errorMes} />
       {user === null
         ? <LogingHandler
-        user = {user}
-        setUser = {setUser}
-        username = {username}
-        password = {password}
-        setUsername = {setUsername}
-        setError = {setError}
-        setPassword = {setPassword}
-        setMessage = {setMessage}
-      />
-      : <Blogs
+          user = {user}
+          setUser = {setUser}
+          username = {username}
+          password = {password}
+          setUsername = {setUsername}
+          setError = {setError}
+          setPassword = {setPassword}
+          setMessage = {setMessage}
+        />
+        :<Blogs
           blogs = {blogs}
           setBlogs={setBlogs}
           user = {user}
