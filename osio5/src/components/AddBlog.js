@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BlogService from '../services/blogs'
 
-const AddBLog = ({ blogs, setBlogs, setMessage, setError, blogFormRef }) => {
+const AddBLog = ({ addBlog }) => {
   const [ newTitle, setNewTitle ] = useState('')
   const [ newAuthor, setNewAuthor ] = useState('')
   const [ newUrl, setNewUrl ] = useState('')
@@ -9,46 +9,29 @@ const AddBLog = ({ blogs, setBlogs, setMessage, setError, blogFormRef }) => {
   const handleAuthorChange = event => setNewAuthor(event.target.value)
   const handleUrlChange = event => setNewUrl(event.target.value)
 
-  const addIt = (event) => {
+  const addNewBlog = (event) => {
     event.preventDefault()
-    const noteBlog = {
+    addBlog({
       title: newTitle,
       author: newAuthor,
       url: newUrl,
-    }
-    blogFormRef.current.toggleVisibility()
-    BlogService
-      .create(noteBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setNewTitle('')
+    })
+    setNewTitle('')
         setNewAuthor('')
         setNewUrl('')
-        setMessage(`A new blog: '${newTitle}' by '${newAuthor} added'`)
-        setTimeout(() => {
-          setMessage(null)
-        }, 4000)
-      }).catch(error => {
-        setError(true)
-        setMessage(error.response.data.error)
-        setTimeout(() => {
-          setMessage(null)
-          setError(false)
-        }, 4000)
-      })
   }
-
+  
   return (
     <div>
-      <form onSubmit={addIt}>
+      <form onSubmit={addNewBlog}>
         <div>
-          title: <input value={newTitle} onChange={handleTitleChange}/>
+          title: <input id='title' value={newTitle} onChange={handleTitleChange}/>
         </div>
         <div>
-          author: <input value={newAuthor} onChange={handleAuthorChange}/>
+          author: <input id='author' value={newAuthor} onChange={handleAuthorChange}/>
         </div>
         <div>
-          url: <input value={newUrl} onChange={handleUrlChange}/>
+          url: <input id='url' value={newUrl} onChange={handleUrlChange}/>
         </div>
         <button type="submit">create</button>
       </form>
