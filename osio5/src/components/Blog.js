@@ -14,22 +14,32 @@ const Blog = ({ blog, user, removeThisBlog, updateThisLike }) => {
       )
     }
   }
+  const showBlog = () => {
+    if (informationVisible) {
+      return (
+        <div>
+          {blog.title} {blog.author}
+          <button onClick={() => setInformationVisible(false)}>cancel</button>
+          <br/> {blog.url}
+          <br/> Likes: {blog.likes}
+          <button onClick={updateThisLike}>like</button>
+          <br/> {blog.user.name}
+          {removeCheck()}
+        </div>
+      )
+    } else {
+      return (
+      <div>
+        <span>{blog.title} {blog.author}</span>
+        <button onClick={() => setInformationVisible(true)}>view</button>
+      </div>
+      )
+    }
+  }
 
   return (
     <div className='blogStyle'>
-      <div style={hideWhenVisible}>
-        {blog.title} {blog.author}
-        <button onClick={() => setInformationVisible(true)}>view</button>
-      </div>
-      <div style={showWhenVisible}>
-        {blog.title} {blog.author}
-        <button onClick={() => setInformationVisible(false)}>cancel</button>
-        <br/> {blog.url}
-        <br/> {blog.likes}
-        <button onClick={updateThisLike}>like</button>
-        <br/> {blog.user.name}
-        {removeCheck()}
-      </div>
+      {showBlog()}
     </div>
   )
 }
