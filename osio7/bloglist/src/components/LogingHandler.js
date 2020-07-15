@@ -1,67 +1,57 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import loginService from '../services/login'
-import BlogService from '../services/blogs'
-import PropTypes from 'prop-types'
 import { setNotification } from '../reducers/notificationReducer'
+import { logIn } from '../reducers/loginReducer'
+import { Form, Container, Row, Col, Button} from 'react-bootstrap'
 
-const LogingHandler = ({ setUser, username, password, setUsername, setPassword}) => {
+const LogingHandler = ( ) => {
   const dispatch = useDispatch()
-  const handleLogin = async (event) => {
+  const [ username, setUsername ] = useState('')
+  const [ password, setPassword ] = useState('')
 
+  const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      BlogService.setToken(user.token)
-      setUser(user)
+      dispatch(logIn(username, password))
       setUsername('')
       setPassword('')
-    } catch (error) {
-      dispatch(setNotification(error.response.data.error, true))
-    }
   }
 
   return (
     <div>
-      <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            id='username'
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            id='password'
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button id='loginButton' type="submit">login</button>
-      </form>
+      <Container>
+        <Row>
+          <Col md={{ span: 6, offset: 3 }}>
+            <h2 className='logingHeadLine'>Log in to application</h2>
+            <Form onSubmit={handleLogin}>
+              <Form.Group>
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  id='username'
+                  type="text"
+                  value={username}
+                  name="Username"
+                  placeholder="Username"
+                  onChange={({ target }) => setUsername(target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  id='password'
+                  type="password"
+                  value={password}
+                  name="Password"
+                  placeholder="Password"
+                  onChange={({ target }) => setPassword(target.value)}
+                />
+              </Form.Group>
+              <Button variant="success" size="lg" id='loginButton' type="submit">login</Button>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
-}
-
-LogingHandler.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  setUsername: PropTypes.func.isRequired,
-  setPassword: PropTypes.func.isRequired,
 }
 
 export default LogingHandler

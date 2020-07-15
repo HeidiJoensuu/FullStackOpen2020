@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Form, Row, Col, Button} from 'react-bootstrap'
 
 const AddBLog = ({ addBlog }) => {
   const [ newTitle, setNewTitle ] = useState('')
@@ -16,24 +17,34 @@ const AddBLog = ({ addBlog }) => {
       url: newUrl,
     })
     setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
+    setNewAuthor('')
+    setNewUrl('')
   }
   
   return (
     <div>
-      <form onSubmit={addNewBlog}>
-        <div>
-          title: <input id='title' value={newTitle} onChange={handleTitleChange}/>
-        </div>
-        <div>
-          author: <input id='author' value={newAuthor} onChange={handleAuthorChange}/>
-        </div>
-        <div>
-          url: <input id='url' value={newUrl} onChange={handleUrlChange}/>
-        </div>
-        <button type="submit">create</button>
-      </form>
+      <Form onSubmit={addNewBlog}>
+      <Form.Group as={Row}>
+        <Form.Label column sm={1}>Title: </Form.Label>
+        <Col sm={5}>
+          <Form.Control id='title' value={newTitle} onChange={handleTitleChange}/>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row}>
+        <Form.Label column sm={1}>Author: </Form.Label>
+        <Col sm={5}>
+          <Form.Control id='author' value={newAuthor} onChange={handleAuthorChange}/>
+        </Col>
+        </Form.Group>
+      <Form.Group as={Row}>
+        <Form.Label column sm={1}>Url: </Form.Label>
+        <Col sm={5}>
+          <Form.Control id='url' value={newUrl} onChange={handleUrlChange}/>
+        </Col>
+      </Form.Group>
+      <Button variant='success' type="submit">create</Button>
+      </Form>
+      <br />
     </div>
   )
 

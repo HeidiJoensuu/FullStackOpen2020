@@ -4,6 +4,8 @@ const notificationReducer = (state = {message: null, errorStatus: false}, action
   switch (action.type) {
     case 'NOTIFICATION':
       return action.data
+    case 'ERROR':
+      return  {message: action.data, errorStatus: true}
     default:
       return state
   }

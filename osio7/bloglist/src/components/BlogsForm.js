@@ -1,24 +1,16 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Blog from './Blog'
 import AddBlog from './AddBlog'
 import Togglable from './Togglable'
-import BlogService from '../services/blogs'
-import PropTypes from 'prop-types'
 import { setNotification } from '../reducers/notificationReducer'
-import { createBlog, likeBlog,deleteBlog } from '../reducers/blogsReducer'
+import { createBlog } from '../reducers/blogsReducer'
+import { Button, Container} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
-const Blogs = ({ user, setBlogs}) => {
+const BlogForm = () => {
   const dispatch = useDispatch()
   const blogList = useSelector(state => state.blogs)
   const blogFormRef = React.createRef()
-
-  const hangleLogOut = (event) => {
-    event.preventDefault()
-    window.localStorage.removeItem('loggedBlogappUser')
-    window.location.reload(false)
-    BlogService.setToken(null)
-  }
 
   const addBlogForm = () => {
     return (
@@ -32,7 +24,6 @@ const Blogs = ({ user, setBlogs}) => {
     blogFormRef.current.toggleVisibility()
     try {
       dispatch(createBlog(blogObject))
-      blogList.concat(blogObject)
       dispatch(setNotification(`A new blog: '${blogObject.title}' by '${blogObject.author} added'`, false))
     }
     catch(error) {
@@ -40,50 +31,23 @@ const Blogs = ({ user, setBlogs}) => {
     }
   }
 
-
-  const removeB = (blog) => {
-    if (window.confirm(`Remove blog '${blog.title}' by '${blog.author}'?`)) {
-      try {
-        dispatch(deleteBlog(blog))
-        dispatch(setNotification(`'${blog.title}' has been deleted`, false))
-      } catch (error) {
-        dispatch(setNotification(error.response.data.error, true))
-      }
-    }
-  }
-
-  const updateLike = (blog) => {
-    try {
-      dispatch(likeBlog(blog))
-    } catch(error) {
-      dispatch(setNotification(error.response.data.error, true))
-    }
-  }
-
   return (
     <div>
-      <h2>blogs</h2>
-      <p>{user.name} logged in
-        <button onClick={hangleLogOut}>Log out</button>
-      </p>
+      <h2 className='blogsFormHeadLine'>BLOGS</h2>
       {addBlogForm()}
       <div>
-        {blogList.map(blog =>
-          <Blog key={blog.id}
-            blog={blog}
-            user ={user}
-            updateThisLike = {() => updateLike(blog)}
-            removeThisBlog = {() => removeB(blog)}
-          />)}
+        <Container>
+          {blogList.map(blog =>
+            <li key={blog.id} className='blogList'>
+              {blog.title} 
+              <Link to={`/blogs/${blog.id}`}><Button variant="outline-success" className='blogButton' key={blog.id}>view</Button></Link>
+            </li>
+          )}
+        </Container>
       </div>
     </div>
   )
 }
 
-Blogs.propTypes = {
-  user: PropTypes.object.isRequired,
-  setBlogs: PropTypes.func.isRequired,
-}
-
-export default Blogs
+export default BlogForm
 

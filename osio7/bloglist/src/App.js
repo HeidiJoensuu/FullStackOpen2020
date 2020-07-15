@@ -1,51 +1,58 @@
-import React, { useState, useEffect } from 'react'
-import blogService from './services/blogs'
+import React, { useEffect } from 'react'
+
 import Notification from './components/Notification'
 import LogingHandler from './components/LogingHandler'
-import Blogs from './components/BlogsForm'
+import Menu from './components/Menu'
+import BlogsForm from './components/BlogsForm'
+import UsersForm from './components/UsersForm'
+import User from './components/User'
+import Blog from './components/Blog'
+import {
+  BrowserRouter as Router,
+  Switch, Route
+} from "react-router-dom"
+
 import { initializeBlog } from './reducers/blogsReducer'
 import { useDispatch,useSelector } from 'react-redux'
+import { loggedUser } from './reducers/loginReducer'
+import { initializeUsers } from './reducers/usersReducer'
+import { Container } from 'react-bootstrap'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [ blogss, setBlogs ] = useState([])
-  const [ mess, setMessage ] = useState(null)
-  const [ errorMes, setError ] = useState(false)
-  const [ username, setUsername ] = useState('')
-  const [ password, setPassword ] = useState('')
-  const [ user, setUser ] = useState(null)
-  const blogs = useSelector(state => state.blogs) 
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
-      dispatch(initializeBlog())
+    dispatch(initializeBlog())
+    dispatch(loggedUser())
+    dispatch(initializeUsers())
   }, [dispatch])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
 
   return (
     <div>
-      <Notification message={mess} errorMes={errorMes} />
+      <Notification />
       {user === null
-        ? <LogingHandler
-          user = {user}
-          setUser = {setUser}
-          username = {username}
-          password = {password}
-          setUsername = {setUsername}
-          setPassword = {setPassword}
-        />
-        :<Blogs
-          blogs = {blogs}
-          setBlogs={setBlogs}
-          user = {user}
-        />
+        ? <LogingHandler />
+        : <Router>
+            <Menu />
+            <Container>
+              <Switch>
+                <Route path='/users/:id'>
+                  <User />
+                </Route>
+                <Route path='/blogs/:id'>
+                  <Blog />
+                </Route>
+                <Route path='/users'>
+                  <UsersForm />
+                </Route>
+                <Route path='/'>
+                  <BlogsForm />
+                </Route>
+              </Switch>
+            </Container>
+          </Router>
       }
     </div>
   )

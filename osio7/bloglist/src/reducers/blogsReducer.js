@@ -5,13 +5,11 @@ const reducer = (state = [], action) => {
     case 'NEW_BLOG':
       return [...state, action.data]
     case 'LIKE_BLOG':
-      const blogToChange = state.find(n => n.id === action.data.id)
-      const changedBlog = {...blogToChange, likes: blogToChange.likes +1}
-      return state
-        .map(blog => blog.id !== action.data.id ? blog : changedBlog)
-        .sort((object1, object2) => object2.likes - object1.likes)
+      return action.data
     case 'REMOVE_BLOG':
       return  action.data
+    case 'NEW_COMMENT':
+      return action.data
     case 'INIT_BLOGS':
       return action.data
     default:
@@ -21,7 +19,8 @@ const reducer = (state = [], action) => {
 
 export const initializeBlog = () => {
   return async dispatch => {
-    let blogs = await blogsService.getAll()
+    let blogs = null
+    blogs = await blogsService.getAll()
     blogs.sort((object1, object2) => object2.likes - object1.likes)
     dispatch({
       type: 'INIT_BLOGS',
@@ -32,33 +31,96 @@ export const initializeBlog = () => {
 
 export const createBlog = content => {
   return async dispatch => {
-    const newBlog = await blogsService.create(content)
-    dispatch({
-      type: 'NEW_BLOG',
-      data: newBlog
-    })
+    try {
+      const newBlog = await blogsService.create(content)
+      dispatch({
+        type: 'NEW_BLOG',
+        data: newBlog
+      })
+    } catch (error) {
+      dispatch({
+        type: 'ERROR',
+        data: error.response.data.error
+      })
+      setTimeout(() => {
+        dispatch({
+          type: 'ERROR',
+          data: null
+        })
+      }, 5000)
+    }
   }
 }
 
 export const likeBlog = (blog) => {
   return async dispatch => {
-    const liked = await blogsService.update(blog)
-    dispatch({
-      type: 'LIKE_BLOG',
-      data: liked
-    })
+    try {
+      await blogsService.update(blog)
+      const blogs = await blogsService.getAll()
+      dispatch({
+        type: 'LIKE_BLOG',
+        data: blogs
+      })
+    } catch (error) {
+      dispatch({
+        type: 'ERROR',
+        data: error.response.data.error
+      })
+      setTimeout(() => {
+        dispatch({
+          type: 'ERROR',
+          data: null
+        })
+      }, 5000)
+    }
   }
 }
 
 export const deleteBlog = (blog) => {
   return async dispatch => {
-    await blogsService.removeBlog(blog.id)
-    const list = await blogsService.getAll()
-    list.sort((object1, object2) => object2.likes - object1.likes)
-    dispatch({
-      type: 'REMOVE_BLOG',
-      data: list
-    })
+    try {
+      await blogsService.removeBlog(blog.id)
+      const list = await blogsService.getAll()
+      list.sort((object1, object2) => object2.likes - object1.likes)
+      dispatch({
+        type: 'REMOVE_BLOG',
+        data: list
+      })
+    } catch (error) {
+      dispatch({
+        type: 'ERROR',
+        data: error.response.data.error
+      })
+      setTimeout(() => {
+        dispatch({
+          type: 'ERROR',
+          data: null
+        })
+      }, 5000)
+    }
+  }
+}
+export const createComment = content => {
+  return async dispatch => {
+    try {
+      await blogsService.createComment(content)
+      const blogs = await blogsService.getAll()
+      dispatch({
+        type: 'NEW_COMMENT',
+        data: blogs
+      })
+    } catch (error) {
+      dispatch({
+        type: 'ERROR',
+        data: error.response.data.error
+      })
+      setTimeout(() => {
+        dispatch({
+          type: 'ERROR',
+          data: null
+        })
+      }, 5000)
+    }
   }
 }
 
