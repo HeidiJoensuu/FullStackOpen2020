@@ -75,6 +75,27 @@ const parseInput = (args: Array<string>): Inputs => {
   };
 };
 
+export const parseQueryEx = (list: Array<number>, initTarget: number) : Values => {
+  if (list.length < 1) throw new Error('Arguments missing');
+
+  let savedTarget = 0;
+  const savedList: number[] = [];
+  if (!isNaN(Number(initTarget))) {
+      savedTarget= Number(initTarget);
+  } else {
+    throw new Error('target is not a number');
+  }
+
+  if (list.every(n => !isNaN(Number(n)))) {
+    list.forEach(element => {
+      savedList.push(Number(element));
+    });
+  } else {
+    throw new Error("not all values are numbers");
+  }
+  return calculate(savedList, savedTarget);
+};
+
 try {
   const {list, initTarget} = parseInput(process.argv);
   console.log(calculate(list, initTarget));

@@ -39,15 +39,13 @@ const parseInput = (args: Array<string>): Inputs => {
   }
 };
 
-export const parseQuery = (queryHeight: string, queryWeight: string) : string => {
+export const parseQueryBmi = (queryHeight: string, queryWeight: string) : string => {
   if (!isNaN(Number(queryHeight)) && !isNaN(Number(queryWeight))) {
     return calculateBmi(Number(queryHeight), Number(queryWeight));
   } else {
     throw new Error('Provided values were not numbers!');
   }
 };
-
-
 
 try {
   const {height, weight} = parseInput(process.argv);
