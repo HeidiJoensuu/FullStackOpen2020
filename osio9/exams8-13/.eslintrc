@@ -20,6 +20,6 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./FullStack2020/fullStackOpen2020/osio9/exams8-/tsconfig.json"
+    "project": "./FullStack2020/fullStackOpen2020/osio9/exams8-13/tsconfig.json"
   }
 }

@@ -1,6 +1,7 @@
 import express from 'express';
 const app = express();
 import diagnosesRouter from './routes/diagnoses';
+import patientsRouter from './routes/patients';
 app.use(express.json());
 import cors from 'cors';
 
@@ -13,6 +14,7 @@ app.get('/api/ping', (_req, res) => {
 });
 
 app.use('/api/diagnoses', diagnosesRouter);
+app.use('/api/patients', patientsRouter);
 
 
 
