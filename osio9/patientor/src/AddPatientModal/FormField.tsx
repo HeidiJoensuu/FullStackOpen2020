@@ -1,13 +1,18 @@
 import React from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
-import { Diagnosis, Gender } from "../types";
+import { Diagnosis, Gender, Types } from "../types";
 
 // structure of a single option
 export type GenderOption = {
   value: Gender;
   label: string;
 };
+
+export type TypeOption = {
+  value: Types;
+  label: string;
+}
 
 // props for select field component
 type SelectFieldProps = {
@@ -32,6 +37,30 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     </Field>
   </Form.Field>
 );
+
+type SelectFieldPropsTypes = {
+  name: string;
+  label: string;
+  options: TypeOption[];
+};
+
+export const SelectFieldTypes: React.FC<SelectFieldPropsTypes> = ({
+  name,
+  label,
+  options
+}: SelectFieldPropsTypes) => (
+  <Form.Field>
+    <label>{label}</label>
+    <Field as="select" name={name} className="ui dropdown">
+      {options.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.label || option.value}
+        </option>
+      ))}
+    </Field>
+  </Form.Field>
+);
+
 
 interface TextProps extends FieldProps {
   label: string;

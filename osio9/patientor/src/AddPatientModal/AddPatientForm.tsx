@@ -106,5 +106,3 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
     </Formik>
   );
 };
-
-export default AddPatientForm;
