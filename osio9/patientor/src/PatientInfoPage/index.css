@@ -1,0 +1,9 @@
+.border {
+  border-color: lightgray;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  border-width: 2px;
+  margin-bottom: 5px;
+
+}

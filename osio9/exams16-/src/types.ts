@@ -1,7 +1,3 @@
-interface State {
-  patients: Map<string, Patient>;
-}
-
 interface BaseEntry {
   id: string;
   description: string;
@@ -11,7 +7,6 @@ interface BaseEntry {
   employerName?: string;
   discharge?: Discharge;
   sickLeave?: SickLeave;
-  healthCheckRating?: HealthCheckRating;
 }
 interface Discharge {
   date: string;
@@ -23,8 +18,9 @@ interface SickLeave {
   endDate: string;
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
+  healthCheckRating?: HealthCheckRating;
 }
 
 interface HospitalEntry extends BaseEntry {
@@ -57,12 +53,6 @@ export enum Gender {
   Other = 'other'
 }
 
-export enum Types {
-  Hospital = "Hospital",
-  HealthCheck = "HealthCheck",
-  OccupationalHealthcare = "OccupationalHealthcare"
-}
-
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
@@ -77,6 +67,8 @@ export type Entry =
 
 export type NonSensitivePatientEntry = Omit<Patient, 'ssn'>;
 
-export type NewPatientEntry = Omit<Patient, 'id'>;
+export type NewPatientEntry = Omit<Patient, 'id' | 'entries'>;
+
+export type NewEntry = Omit<Entry, 'id'>;
 
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
